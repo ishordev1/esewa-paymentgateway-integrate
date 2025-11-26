@@ -1,0 +1,149 @@
+<%- include('../partials/header', { title: title || 'My Orders' }) %>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-person-circle text-success" style="font-size: 5rem;"></i>
+                        <h5 class="mt-2"><%= user.name %></h5>
+                        <p class="text-muted mb-0"><%= user.email %></p>
+                    </div>
+                    <hr>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="/profile" class="text-decoration-none">
+                                <i class="bi bi-person"></i> My Profile
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/orders" class="text-decoration-none text-success fw-bold">
+                                <i class="bi bi-box-seam"></i> My Orders
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/track-order" class="text-decoration-none">
+                                <i class="bi bi-geo-alt"></i> Track Order
+                            </a>
+                        </li>
+                        <% if (user.role === 'admin') { %>
+                        <li class="mb-2">
+                            <a href="/admin/dashboard" class="text-decoration-none">
+                                <i class="bi bi-speedometer2"></i> Admin Dashboard
+                            </a>
+                        </li>
+                        <% } %>
+                        <li class="mb-2">
+                            <a href="/logout" class="text-decoration-none text-danger">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-box-seam"></i> Order History</h5>
+                </div>
+                <div class="card-body">
+                    <% if (orders && orders.length > 0) { %>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <p class="text-muted mb-0">Total Orders: <strong><%= orders.length %></strong></p>
+                            </div>
+                        </div>
+                        
+                        <% orders.forEach(order => { %>
+                        <div class="card mb-3 border shadow-sm">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-2">
+                                            <strong><%= order.orderNumber %></strong>
+                                            <span class="badge bg-<%= order.orderStatus === 'Delivered' ? 'success' : order.orderStatus === 'Cancelled' ? 'danger' : order.orderStatus === 'Shipped' ? 'info' : 'primary' %> ms-2">
+                                                <%= order.orderStatus %>
+                                            </span>
+                                        </h6>
+                                        <p class="text-muted mb-1">
+                                            <i class="bi bi-calendar"></i> Ordered on: <%= new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                                        </p>
+                                        <p class="mb-2">
+                                            <i class="bi bi-box"></i> <%= order.items.length %> item(s) | 
+                                            <i class="bi bi-credit-card"></i> Payment: 
+                                            <span class="badge bg-<%= order.paymentStatus === 'Completed' ? 'success' : 'warning' %>">
+                                                <%= order.paymentStatus %>
+                                            </span>
+                                        </p>
+                                        
+                                        <!-- Order Items Preview -->
+                                        <div class="small text-muted">
+                                            <% order.items.slice(0, 2).forEach((item, index) => { %>
+                                                <span><%= item.productName %> (<%= item.variant.size %>)</span><% if (index < order.items.length - 1 && index < 1) { %>, <% } %>
+                                            <% }); %>
+                                            <% if (order.items.length > 2) { %>
+                                                <span>and <%= order.items.length - 2 %> more...</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4 text-md-end">
+                                        <h5 class="text-success mb-3">NPR <%= order.totalAmount.toLocaleString() %></h5>
+                                        <a href="/orders/<%= order._id %>" class="btn btn-outline-success btn-sm">
+                                            <i class="bi bi-eye"></i> View Details
+                                        </a>
+                                        <% if (order.orderStatus !== 'Delivered' && order.orderStatus !== 'Cancelled') { %>
+                                        <form action="/track-order" method="POST" class="d-inline mt-2">
+                                            <input type="hidden" name="orderNumber" value="<%= order.orderNumber %>">
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-geo-alt"></i> Track
+                                            </button>
+                                        </form>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                
+                                <!-- Progress Bar -->
+                                <div class="mt-3">
+                                    <div class="progress" style="height: 8px;">
+                                        <% 
+                                            let progress = 25;
+                                            if (order.orderStatus === 'Processing') progress = 50;
+                                            if (order.orderStatus === 'Shipped') progress = 75;
+                                            if (order.orderStatus === 'Delivered') progress = 100;
+                                            if (order.orderStatus === 'Cancelled') progress = 100;
+                                        %>
+                                        <div class="progress-bar <%= order.orderStatus === 'Cancelled' ? 'bg-danger' : 'bg-success' %>" 
+                                             style="width: <%= progress %>%"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <small class="text-muted">Placed</small>
+                                        <small class="text-muted">Processing</small>
+                                        <small class="text-muted">Shipped</small>
+                                        <small class="text-muted">Delivered</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                        
+                    <% } else { %>
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                            <h5 class="mt-3 text-muted">No Orders Yet</h5>
+                            <p class="text-muted">You haven't placed any orders yet.</p>
+                            <a href="/products" class="btn btn-success mt-3">
+                                <i class="bi bi-cart"></i> Start Shopping
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

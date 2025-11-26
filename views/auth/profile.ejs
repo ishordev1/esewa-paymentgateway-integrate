@@ -1,0 +1,182 @@
+<%- include('../partials/header', { title: 'My Profile' }) %>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-person-circle text-success" style="font-size: 5rem;"></i>
+                        <h5 class="mt-2"><%= user.name %></h5>
+                        <p class="text-muted mb-0"><%= user.email %></p>
+                        <span class="badge bg-<%= user.role === 'admin' ? 'danger' : 'success' %> mt-2">
+                            <%= user.role.toUpperCase() %>
+                        </span>
+                    </div>
+                    <hr>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="/profile" class="text-decoration-none text-success">
+                                <i class="bi bi-person"></i> My Profile
+                            </a>
+                        </li>
+                        <% if (user.role === 'admin') { %>
+                        <li class="mb-2">
+                            <a href="/admin/dashboard" class="text-decoration-none text-success">
+                                <i class="bi bi-speedometer2"></i> Admin Dashboard
+                            </a>
+                        </li>
+                        <% } %>
+                        <li class="mb-2">
+                            <a href="/logout" class="text-decoration-none text-danger">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Update Profile</h5>
+                </div>
+                <div class="card-body">
+                    <% if (error) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= error %>
+                    </div>
+                    <% } %>
+                    
+                    <% if (success) { %>
+                    <div class="alert alert-success" role="alert">
+                        <%= success %>
+                    </div>
+                    <% } %>
+                    
+                    <form method="POST" action="/profile">
+                        <h6 class="mb-3">Personal Information</h6>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" value="<%= user.email %>" disabled>
+                                <small class="text-muted">Email cannot be changed</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="<%= user.phone || '' %>">
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <h6 class="mb-3">Address</h6>
+                        
+                        <div class="mb-3">
+                            <label for="street" class="form-label">Street Address</label>
+                            <input type="text" class="form-control" id="street" name="street" value="<%= user.address && user.address.street ? user.address.street : '' %>">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" value="<%= user.address && user.address.city ? user.address.city : '' %>">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="state" class="form-label">State/Province</label>
+                                <input type="text" class="form-control" id="state" name="state" value="<%= user.address && user.address.state ? user.address.state : '' %>">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="zipCode" class="form-label">Zip Code</label>
+                                <input type="text" class="form-control" id="zipCode" name="zipCode" value="<%= user.address && user.address.zipCode ? user.address.zipCode : '' %>">
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <h6 class="mb-3">Change Password (Optional)</h6>
+                        
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="newPassword" class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" name="newPassword" minlength="6">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" minlength="6">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Update Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Recent Orders Section -->
+            <% if (typeof orders !== 'undefined' && orders && orders.length > 0) { %>
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Orders</h5>
+                    <a href="/track-order" class="btn btn-sm btn-outline-success">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Items</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orders.forEach(order => { %>
+                                <tr>
+                                    <td><strong><%= order.orderNumber %></strong></td>
+                                    <td><%= new Date(order.createdAt).toLocaleDateString() %></td>
+                                    <td><%= order.items.length %> item(s)</td>
+                                    <td>NPR <%= order.totalAmount.toLocaleString() %></td>
+                                    <td>
+                                        <span class="badge bg-<%= order.orderStatus === 'Delivered' ? 'success' : order.orderStatus === 'Cancelled' ? 'danger' : 'primary' %>">
+                                            <%= order.orderStatus %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form action="/track-order" method="POST" style="display: inline;">
+                                            <input type="hidden" name="orderNumber" value="<%= order.orderNumber %>">
+                                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-eye"></i> View
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

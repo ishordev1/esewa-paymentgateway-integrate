@@ -1,0 +1,192 @@
+<%- include('../partials/admin-header', { title: product ? 'Edit Product' : 'Add Product', user: user }) %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><%= product ? 'Edit Product' : 'Add Product' %></h1>
+    <a href="/admin/products" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+</div>
+
+<% if (error) { %>
+<div class="alert alert-danger" role="alert">
+    <%= error %>
+</div>
+<% } %>
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="POST" action="<%= product ? '/admin/products/edit/' + product._id : '/admin/products/add' %>" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name" class="form-label">Product Name *</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= product ? product.name : '' %>" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Description *</label>
+                <textarea class="form-control" id="description" name="description" rows="4" required><%= product ? product.description : '' %></textarea>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="category" class="form-label">Category *</label>
+                    <select class="form-select" id="category" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Mango Trees" <%= product && product.category === 'Mango Trees' ? 'selected' : '' %>>Mango Trees</option>
+                        <option value="Fruit Trees" <%= product && product.category === 'Fruit Trees' ? 'selected' : '' %>>Fruit Trees</option>
+                        <option value="Flowering Plants" <%= product && product.category === 'Flowering Plants' ? 'selected' : '' %>>Flowering Plants</option>
+                        <option value="Indoor Plants" <%= product && product.category === 'Indoor Plants' ? 'selected' : '' %>>Indoor Plants</option>
+                        <option value="Outdoor Plants" <%= product && product.category === 'Outdoor Plants' ? 'selected' : '' %>>Outdoor Plants</option>
+                        <option value="Herbs" <%= product && product.category === 'Herbs' ? 'selected' : '' %>>Herbs</option>
+                        <option value="Other" <%= product && product.category === 'Other' ? 'selected' : '' %>>Other</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Featured</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="featured" name="featured" <%= product && product.featured ? 'checked' : '' %>>
+                        <label class="form-check-label" for="featured">
+                            Mark as featured product
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Product Images</label>
+                <input type="file" class="form-control" name="images" accept="image/*" multiple>
+                <small class="text-muted">You can upload up to 5 images. Accepted formats: JPG, PNG, GIF, WEBP</small>
+                
+                <% if (product && product.images && product.images.length > 0) { %>
+                <div class="mt-2">
+                    <p class="mb-2">Current Images:</p>
+                    <div class="row">
+                        <% product.images.forEach(image => { %>
+                        <div class="col-md-3 mb-2">
+                            <img src="<%= image %>" class="img-thumbnail" alt="Product image">
+                            <input type="hidden" name="existingImages" value="<%= image %>">
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Product Variants (Sizes & Prices)</h5>
+                </div>
+                <div class="card-body">
+                    <div id="variants-container">
+                        <% if (product && product.variants && product.variants.length > 0) { %>
+                            <% product.variants.forEach((variant, index) => { %>
+                            <div class="variant-row row mb-2">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control variant-size" placeholder="Size (e.g., 5 feet)" value="<%= variant.size %>" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form-control variant-price" placeholder="Price (NPR)" value="<%= variant.price %>" min="0" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form-control variant-stock" placeholder="Stock" value="<%= variant.stock %>" min="0" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-danger remove-variant">Remove</button>
+                                </div>
+                            </div>
+                            <% }); %>
+                        <% } else { %>
+                        <div class="variant-row row mb-2">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control variant-size" placeholder="Size (e.g., 5 feet)" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control variant-price" placeholder="Price (NPR)" min="0" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control variant-stock" placeholder="Stock" min="0" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger remove-variant">Remove</button>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary mt-2" id="add-variant">
+                        <i class="bi bi-plus"></i> Add Variant
+                    </button>
+                </div>
+            </div>
+            
+            <input type="hidden" name="variants" id="variants-data">
+            
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-save"></i> <%= product ? 'Update Product' : 'Add Product' %>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const variantsContainer = document.getElementById('variants-container');
+    const addVariantBtn = document.getElementById('add-variant');
+    const form = document.querySelector('form');
+    
+    // Add new variant row
+    addVariantBtn.addEventListener('click', function() {
+        const variantRow = document.createElement('div');
+        variantRow.className = 'variant-row row mb-2';
+        variantRow.innerHTML = `
+            <div class="col-md-4">
+                <input type="text" class="form-control variant-size" placeholder="Size (e.g., 5 feet)" required>
+            </div>
+            <div class="col-md-3">
+                <input type="number" class="form-control variant-price" placeholder="Price (NPR)" min="0" required>
+            </div>
+            <div class="col-md-3">
+                <input type="number" class="form-control variant-stock" placeholder="Stock" min="0" required>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger remove-variant">Remove</button>
+            </div>
+        `;
+        variantsContainer.appendChild(variantRow);
+    });
+    
+    // Remove variant row
+    variantsContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-variant')) {
+            if (variantsContainer.children.length > 1) {
+                e.target.closest('.variant-row').remove();
+            } else {
+                alert('At least one variant is required!');
+            }
+        }
+    });
+    
+    // Collect variants data before form submission
+    form.addEventListener('submit', function(e) {
+        const variants = [];
+        const variantRows = document.querySelectorAll('.variant-row');
+        
+        variantRows.forEach(row => {
+            const size = row.querySelector('.variant-size').value;
+            const price = row.querySelector('.variant-price').value;
+            const stock = row.querySelector('.variant-stock').value;
+            
+            if (size && price && stock) {
+                variants.push({
+                    size: size,
+                    price: parseFloat(price),
+                    stock: parseInt(stock)
+                });
+            }
+        });
+        
+        document.getElementById('variants-data').value = JSON.stringify(variants);
+    });
+});
+</script>
+
+<%- include('../partials/admin-footer') %>

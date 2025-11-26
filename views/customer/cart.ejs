@@ -1,0 +1,142 @@
+<%- include('../partials/header', { title: 'Shopping Cart' }) %>
+
+<div class="container my-5">
+    <h1 class="mb-4">Shopping Cart</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div id="cart-items">
+                <!-- Cart items will be loaded here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">NPR 0</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Delivery:</span>
+                        <span>NPR 100</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total:</strong>
+                        <strong id="cart-total" class="text-success">NPR 100</strong>
+                    </div>
+                    <a href="/checkout" class="btn btn-success w-100" id="checkout-btn">
+                        Proceed to Checkout
+                    </a>
+                    <a href="/products" class="btn btn-outline-secondary w-100 mt-2">
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadCartItems();
+});
+
+function loadCartItems() {
+    const cart = getCart();
+    const cartItemsContainer = document.getElementById('cart-items');
+    
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `
+            <div class="alert alert-info text-center">
+                <i class="bi bi-cart-x" style="font-size: 3rem;"></i>
+                <h4 class="mt-3">Your cart is empty</h4>
+                <p>Add some plants to your cart to get started!</p>
+                <a href="/products" class="btn btn-success">Browse Products</a>
+            </div>
+        `;
+        document.getElementById('checkout-btn').disabled = true;
+        return;
+    }
+    
+    let html = '';
+    let subtotal = 0;
+    
+    cart.forEach((item, index) => {
+        const itemTotal = item.variant.price * item.quantity;
+        subtotal += itemTotal;
+        
+        html += `
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <img src="${item.productImage || 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=100&h=100&fit=crop'}" 
+                                 class="img-fluid rounded" alt="${item.productName}">
+                        </div>
+                        <div class="col-md-4">
+                            <h5>${item.productName}</h5>
+                            <p class="text-muted mb-0">Size: ${item.variant.size}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="mb-0">NPR ${item.variant.price.toLocaleString()}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group input-group-sm">
+                                <button class="btn btn-outline-secondary" onclick="updateQuantity(${index}, -1)">-</button>
+                                <input type="number" class="form-control text-center" value="${item.quantity}" min="1" readonly>
+                                <button class="btn btn-outline-secondary" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <p class="mb-0 fw-bold">NPR ${itemTotal.toLocaleString()}</p>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-danger btn-sm" onclick="removeFromCart(${index})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    cartItemsContainer.innerHTML = html;
+    
+    const deliveryFee = 100;
+    const total = subtotal + deliveryFee;
+    
+    document.getElementById('cart-subtotal').textContent = 'NPR ' + subtotal.toLocaleString();
+    document.getElementById('cart-total').textContent = 'NPR ' + total.toLocaleString();
+}
+
+function updateQuantity(index, change) {
+    const cart = getCart();
+    cart[index].quantity += change;
+    
+    if (cart[index].quantity < 1) {
+        cart[index].quantity = 1;
+    }
+    
+    saveCart(cart);
+    loadCartItems();
+    updateCartCount();
+}
+
+function removeFromCart(index) {
+    if (confirm('Remove this item from cart?')) {
+        const cart = getCart();
+        cart.splice(index, 1);
+        saveCart(cart);
+        loadCartItems();
+        updateCartCount();
+    }
+}
+</script>
+
+<%- include('../partials/footer') %>

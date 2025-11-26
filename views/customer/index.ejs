@@ -1,0 +1,127 @@
+<%- include('../partials/header', { title: 'Home' }) %>
+
+<!-- Hero Section -->
+<section class="hero bg-success text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">Welcome to Nursery Shop Nepal</h1>
+                <p class="lead">Discover a wide variety of quality plants for your home and garden. From mango trees to beautiful flowering plants!</p>
+                <a href="/products" class="btn btn-light btn-lg">Shop Now</a>
+            </div>
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=600&h=400&fit=crop" alt="Nursery Plants" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row">
+            <% if (featuredProducts && featuredProducts.length > 0) { %>
+                <% featuredProducts.forEach(product => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <% if (product.images && product.images.length > 0) { %>
+                        <img src="<%= product.images[0] %>" class="card-img-top" alt="<%= product.name %>" style="height: 250px; object-fit: cover;">
+                        <% } else { %>
+                        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&h=250&fit=crop" class="card-img-top" alt="<%= product.name %>" style="height: 250px; object-fit: cover;">
+                        <% } %>
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2"><%= product.category %></span>
+                            <h5 class="card-title"><%= product.name %></h5>
+                            <p class="card-text"><%= product.description.substring(0, 100) %>...</p>
+                            <% if (product.variants && product.variants.length > 0) { %>
+                            <p class="text-success fw-bold">From NPR <%= Math.min(...product.variants.map(v => v.price)).toLocaleString() %></p>
+                            <% } %>
+                            <a href="/product/<%= product._id %>" class="btn btn-success w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+            <% } else { %>
+                <div class="col-12">
+                    <p class="text-center text-muted">No featured products available at the moment.</p>
+                </div>
+            <% } %>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="/products" class="btn btn-outline-success btn-lg">View All Products</a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Shop by Category</h2>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-flower1 text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Mango Trees</h5>
+                        <a href="/products?category=Mango Trees" class="btn btn-sm btn-success">Browse</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-tree text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Fruit Trees</h5>
+                        <a href="/products?category=Fruit Trees" class="btn btn-sm btn-success">Browse</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-flower2 text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Flowering Plants</h5>
+                        <a href="/products?category=Flowering Plants" class="btn btn-sm btn-success">Browse</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-house text-success" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Indoor Plants</h5>
+                        <a href="/products?category=Indoor Plants" class="btn btn-sm btn-success">Browse</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Why Choose Us</h2>
+        <div class="row">
+            <div class="col-md-4 text-center mb-3">
+                <i class="bi bi-award text-success" style="font-size: 3rem;"></i>
+                <h4 class="mt-3">Quality Plants</h4>
+                <p>We provide only the highest quality plants, carefully nurtured for your satisfaction.</p>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <i class="bi bi-truck text-success" style="font-size: 3rem;"></i>
+                <h4 class="mt-3">Fast Delivery</h4>
+                <p>Quick and reliable delivery across Nepal to ensure your plants arrive fresh.</p>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <i class="bi bi-credit-card text-success" style="font-size: 3rem;"></i>
+                <h4 class="mt-3">Secure Payment</h4>
+                <p>Pay securely with eSewa, Nepal's trusted payment gateway.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('../partials/footer') %>

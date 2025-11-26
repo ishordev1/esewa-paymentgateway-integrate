@@ -1,0 +1,84 @@
+<%- include('../partials/admin-header', { title: 'Customer Details', user: user }) %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Customer Details - <%= customer.name %></h1>
+    <a href="/admin/customers" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Customers
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Customer Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> <%= customer.name %></p>
+                <p><strong>Email:</strong> <%= customer.email %></p>
+                <p><strong>Phone:</strong> <%= customer.phone %></p>
+                <% if (customer.address && customer.address.street) { %>
+                <p><strong>Address:</strong><br>
+                    <%= customer.address.street %><br>
+                    <%= customer.address.city %>, <%= customer.address.state %> <%= customer.address.zipCode %>
+                </p>
+                <% } %>
+                <p><strong>Total Orders:</strong> <%= customer.totalOrders %></p>
+                <p><strong>Total Spent:</strong> NPR <%= customer.totalSpent.toLocaleString() %></p>
+                <p><strong>Joined:</strong> <%= new Date(customer.createdAt).toLocaleDateString() %></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Order History</h5>
+            </div>
+            <div class="card-body">
+                <% if (orders.length > 0) { %>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.orderNumber %></td>
+                                <td><%= new Date(order.createdAt).toLocaleDateString() %></td>
+                                <td>NPR <%= order.totalAmount.toLocaleString() %></td>
+                                <td>
+                                    <span class="badge bg-<%= order.paymentStatus === 'Completed' ? 'success' : 'warning' %>">
+                                        <%= order.paymentStatus %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-<%= order.orderStatus === 'Delivered' ? 'success' : 'info' %>">
+                                        <%= order.orderStatus %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/admin/orders/<%= order._id %>" class="btn btn-sm btn-primary">View</a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } else { %>
+                <p class="text-center text-muted">No orders yet</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/admin-footer') %>

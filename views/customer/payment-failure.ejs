@@ -1,0 +1,26 @@
+<%- include('../partials/header', { title: 'Payment Failed' }) %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body py-5">
+                    <i class="bi bi-x-circle-fill text-danger" style="font-size: 5rem;"></i>
+                    <h2 class="mt-4 text-danger">Payment Failed</h2>
+                    <p class="lead">Unfortunately, your payment could not be processed.</p>
+                    
+                    <div class="alert alert-danger mt-4">
+                        <p class="mb-0">Please try again or contact support if the problem persists.</p>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="/checkout" class="btn btn-success me-2">Try Again</a>
+                        <a href="/cart" class="btn btn-outline-secondary">Back to Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

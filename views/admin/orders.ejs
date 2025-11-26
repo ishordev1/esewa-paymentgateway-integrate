@@ -1,0 +1,70 @@
+<%- include('../partials/admin-header', { title: 'Orders', user: user }) %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Orders</h1>
+</div>
+
+<% if (error) { %>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<% } %>
+
+<% if (success) { %>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<% } %>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total Amount</th>
+                <th>Payment Status</th>
+                <th>Order Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (orders.length > 0) { %>
+                <% orders.forEach(order => { %>
+                <tr>
+                    <td><%= order.orderNumber %></td>
+                    <td><%= order.customer.name %><br><small class="text-muted"><%= order.customer.email %></small></td>
+                    <td><%= order.items.length %> item(s)</td>
+                    <td>NPR <%= order.totalAmount.toLocaleString() %></td>
+                    <td>
+                        <span class="badge bg-<%= order.paymentStatus === 'Completed' ? 'success' : order.paymentStatus === 'Failed' ? 'danger' : 'warning' %>">
+                            <%= order.paymentStatus %>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-<%= order.orderStatus === 'Delivered' ? 'success' : order.orderStatus === 'Cancelled' ? 'danger' : 'info' %>">
+                            <%= order.orderStatus %>
+                        </span>
+                    </td>
+                    <td><%= new Date(order.createdAt).toLocaleDateString() %></td>
+                    <td>
+                        <a href="/admin/orders/<%= order._id %>" class="btn btn-sm btn-primary">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="8" class="text-center">No orders found</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/admin-footer') %>

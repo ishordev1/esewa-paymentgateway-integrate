@@ -1,0 +1,205 @@
+[
+  {
+    "name": "Alphonso Mango Tree",
+    "description": "The Alphonso mango is one of the most popular and premium varieties of mango. Known for its rich, sweet taste and vibrant golden color, this tree produces high-quality fruits perfect for eating fresh or making desserts.",
+    "category": "Mango Trees",
+    "images": [
+      "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "3 feet", "price": 1500, "stock": 20},
+      {"size": "5 feet", "price": 2500, "stock": 15},
+      {"size": "8 feet", "price": 4000, "stock": 10}
+    ],
+    "featured": true,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Dasheri Mango Tree",
+    "description": "Dasheri mango is renowned for its exceptional sweetness and aromatic flavor. This North Indian variety is perfect for home gardens and produces medium-sized fruits with smooth, thin skin.",
+    "category": "Mango Trees",
+    "images": [
+      "https://images.unsplash.com/photo-1605027990121-cbae9d3a341e?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "4 feet", "price": 2000, "stock": 12},
+      {"size": "6 feet", "price": 3200, "stock": 8},
+      {"size": "10 feet", "price": 5500, "stock": 5}
+    ],
+    "featured": true,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Langra Mango Tree",
+    "description": "Langra mango is a popular variety from Varanasi, India. It has a unique sweet-tangy flavor and greenish skin even when ripe. This hardy tree adapts well to various climates.",
+    "category": "Mango Trees",
+    "images": [
+      "https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "3 feet", "price": 1800, "stock": 18},
+      {"size": "5 feet", "price": 2800, "stock": 12},
+      {"size": "7 feet", "price": 3800, "stock": 8}
+    ],
+    "featured": false,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Lemon Tree (Kagati)",
+    "description": "Dwarf lemon tree perfect for Nepali climate. Produces juicy, aromatic lemons rich in Vitamin C. Ideal for home gardens and containers. Flowers throughout the year.",
+    "category": "Fruit Trees",
+    "images": [
+      "https://images.unsplash.com/photo-1590502160462-3a4fdd9d3f8f?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "2 feet", "price": 800, "stock": 25},
+      {"size": "3 feet", "price": 1200, "stock": 20},
+      {"size": "4 feet", "price": 1800, "stock": 15}
+    ],
+    "featured": true,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Guava Tree (Amba)",
+    "description": "High-quality guava variety suited for Nepali weather. Bears sweet and crunchy fruits twice a year. Rich in vitamins and minerals. Low maintenance and disease-resistant.",
+    "category": "Fruit Trees",
+    "images": [
+      "https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "3 feet", "price": 1000, "stock": 22},
+      {"size": "5 feet", "price": 1800, "stock": 16},
+      {"size": "7 feet", "price": 2800, "stock": 10}
+    ],
+    "featured": true,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Rose Plant (Hybrid)",
+    "description": "Beautiful hybrid rose plant with vibrant colors. Blooms continuously throughout the season. Perfect for gardens and decorative purposes. Available in red, pink, yellow, and white varieties.",
+    "category": "Flowering Plants",
+    "images": [
+      "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "Small pot", "price": 400, "stock": 40},
+      {"size": "Medium pot", "price": 600, "stock": 30},
+      {"size": "Large pot", "price": 900, "stock": 20}
+    ],
+    "featured": true,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Bougainvillea",
+    "description": "Stunning ornamental plant with vibrant colored bracts. Excellent for hedges, arches, and wall coverage. Drought-tolerant and low maintenance. Blooms profusely in full sunlight.",
+    "category": "Flowering Plants",
+    "images": [
+      "https://images.unsplash.com/photo-1597868165956-03a6827955b1?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "Small", "price": 350, "stock": 35},
+      {"size": "Medium", "price": 550, "stock": 25},
+      {"size": "Large", "price": 850, "stock": 15}
+    ],
+    "featured": false,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Money Plant (Pothos)",
+    "description": "Popular indoor plant known for bringing good luck and prosperity. Easy to grow and maintain. Purifies air and thrives in low light conditions. Perfect for homes and offices.",
+    "category": "Indoor Plants",
+    "images": [
+      "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "Small pot", "price": 250, "stock": 50},
+      {"size": "Medium pot", "price": 400, "stock": 35},
+      {"size": "Hanging basket", "price": 650, "stock": 20}
+    ],
+    "featured": false,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Snake Plant (Sansevieria)",
+    "description": "Extremely hardy indoor plant that purifies air by removing toxins. Requires minimal watering and care. Grows well in various light conditions. Known for converting CO2 to oxygen at night.",
+    "category": "Indoor Plants",
+    "images": [
+      "https://images.unsplash.com/photo-1593482892290-f54927ae1bb6?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "Small", "price": 300, "stock": 45},
+      {"size": "Medium", "price": 550, "stock": 30},
+      {"size": "Large", "price": 900, "stock": 18}
+    ],
+    "featured": false,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Tulsi (Holy Basil)",
+    "description": "Sacred plant in Nepali culture with numerous medicinal properties. Boosts immunity, relieves stress, and purifies air. Easy to grow in pots or ground. Requires moderate sunlight and water.",
+    "category": "Herbs",
+    "images": [
+      "https://images.unsplash.com/photo-1628556270448-4d4e4148e1b1?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "Small pot", "price": 200, "stock": 60},
+      {"size": "Medium pot", "price": 350, "stock": 40}
+    ],
+    "featured": false,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Mint Plant (Pudina)",
+    "description": "Aromatic herb widely used in Nepali cuisine and traditional medicine. Fast-growing and easy to maintain. Perfect for kitchen gardens. Great for teas, chutneys, and garnishing.",
+    "category": "Herbs",
+    "images": [
+      "https://images.unsplash.com/photo-1628556268486-7afef373e1af?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "Small pot", "price": 180, "stock": 55},
+      {"size": "Medium pot", "price": 300, "stock": 35}
+    ],
+    "featured": false,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  },
+  {
+    "name": "Jasmine Plant (Chameli)",
+    "description": "Fragrant flowering plant with beautiful white blooms. Extensively used for garlands and religious ceremonies. Night-blooming variety with intense fragrance. Can be grown as climber or bush.",
+    "category": "Flowering Plants",
+    "images": [
+      "https://images.unsplash.com/photo-1592729645009-b96d1e63d14b?w=600&h=400&fit=crop"
+    ],
+    "variants": [
+      {"size": "Small", "price": 400, "stock": 28},
+      {"size": "Medium", "price": 650, "stock": 20},
+      {"size": "Large", "price": 1000, "stock": 12}
+    ],
+    "featured": false,
+    "active": true,
+    "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+    "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+  }
+]

@@ -1,0 +1,218 @@
+<%- include('../partials/header', { title: product.name }) %>
+
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/products">Products</a></li>
+            <li class="breadcrumb-item active"><%= product.name %></li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <% if (product.images && product.images.length > 0) { %>
+                        <% product.images.forEach((image, index) => { %>
+                        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                            <img src="<%= image %>" class="d-block w-100 rounded" alt="<%= product.name %>" style="max-height: 500px; object-fit: cover;">
+                        </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="carousel-item active">
+                            <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&h=500&fit=crop" class="d-block w-100 rounded" alt="<%= product.name %>">
+                        </div>
+                    <% } %>
+                </div>
+                <% if (product.images && product.images.length > 1) { %>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="mb-2">
+                <span class="badge bg-success"><%= product.category %></span>
+                <% if (product.featured) { %>
+                <span class="badge bg-warning text-dark">Featured</span>
+                <% } %>
+            </div>
+            <h1><%= product.name %></h1>
+            <p class="lead"><%= product.description %></p>
+            
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Select Size & Price</h5>
+                    <div class="mb-3">
+                        <select class="form-select form-select-lg" id="variantSelect">
+                            <% product.variants.forEach((variant, index) => { %>
+                            <option value="<%= index %>" 
+                                    data-price="<%= variant.price %>" 
+                                    data-stock="<%= variant.stock %>"
+                                    data-size="<%= variant.size %>">
+                                <%= variant.size %> - NPR <%= variant.price.toLocaleString() %> 
+                                <%= variant.stock > 0 ? '(In Stock: ' + variant.stock + ')' : '(Out of Stock)' %>
+                            </option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="text-success mb-0" id="selectedPrice">NPR <%= product.variants[0].price.toLocaleString() %></h3>
+                        <div class="input-group" style="width: 150px;">
+                            <button class="btn btn-outline-secondary" type="button" id="decreaseQty">-</button>
+                            <input type="number" class="form-control text-center" id="quantity" value="1" min="1" max="<%= product.variants[0].stock %>">
+                            <button class="btn btn-outline-secondary" type="button" id="increaseQty">+</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success btn-lg w-100 mb-2" id="addToCart" 
+                            data-product-id="<%= product._id %>"
+                            data-product-name="<%= product.name %>"
+                            data-product-image="<%= product.images && product.images.length > 0 ? product.images[0] : '' %>">
+                        <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                    
+                    <button class="btn btn-outline-success btn-lg w-100" id="buyNow" 
+                            data-product-id="<%= product._id %>"
+                            data-product-name="<%= product.name %>"
+                            data-product-image="<%= product.images && product.images.length > 0 ? product.images[0] : '' %>">
+                        <i class="bi bi-lightning-fill"></i> Buy Now
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Product Information</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success"></i> Category: <%= product.category %></li>
+                        <li><i class="bi bi-check-circle text-success"></i> Multiple size options available</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Healthy and well-maintained plants</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Secure payment with eSewa</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const variantSelect = document.getElementById('variantSelect');
+    const quantityInput = document.getElementById('quantity');
+    const priceDisplay = document.getElementById('selectedPrice');
+    const addToCartBtn = document.getElementById('addToCart');
+    const decreaseBtn = document.getElementById('decreaseQty');
+    const increaseBtn = document.getElementById('increaseQty');
+    
+    // Update price and max quantity when variant changes
+    variantSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const price = selectedOption.dataset.price;
+        const stock = selectedOption.dataset.stock;
+        
+        priceDisplay.textContent = 'NPR ' + parseFloat(price).toLocaleString();
+        quantityInput.max = stock;
+        quantityInput.value = 1;
+    });
+    
+    // Quantity controls
+    decreaseBtn.addEventListener('click', function() {
+        if (quantityInput.value > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    });
+    
+    increaseBtn.addEventListener('click', function() {
+        if (parseInt(quantityInput.value) < parseInt(quantityInput.max)) {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        }
+    });
+    
+    // Add to cart
+    addToCartBtn.addEventListener('click', function() {
+        const selectedOption = variantSelect.options[variantSelect.selectedIndex];
+        const stock = parseInt(selectedOption.dataset.stock);
+        
+        if (stock === 0) {
+            alert('This variant is out of stock!');
+            return;
+        }
+        
+        const cartItem = {
+            productId: this.dataset.productId,
+            productName: this.dataset.productName,
+            productImage: this.dataset.productImage,
+            variant: {
+                size: selectedOption.dataset.size,
+                price: parseFloat(selectedOption.dataset.price)
+            },
+            quantity: parseInt(quantityInput.value)
+        };
+        
+        addToCart(cartItem);
+        
+        // Show success message
+        showToast('Success!', 'Product added to cart successfully!', 'success');
+    });
+    
+    // Buy now - Add to cart and redirect to checkout
+    document.getElementById('buyNow').addEventListener('click', function() {
+        const selectedOption = variantSelect.options[variantSelect.selectedIndex];
+        const stock = parseInt(selectedOption.dataset.stock);
+        
+        if (stock === 0) {
+            alert('This variant is out of stock!');
+            return;
+        }
+        
+        const cartItem = {
+            productId: this.dataset.productId,
+            productName: this.dataset.productName,
+            productImage: this.dataset.productImage,
+            variant: {
+                size: selectedOption.dataset.size,
+                price: parseFloat(selectedOption.dataset.price)
+            },
+            quantity: parseInt(quantityInput.value)
+        };
+        
+        // Clear cart and add only this item
+        localStorage.removeItem('nursery_cart');
+        addToCart(cartItem);
+        
+        // Redirect to checkout
+        window.location.href = '/checkout';
+    });
+    
+    function showToast(title, message, type) {
+        const bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-info';
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 p-3';
+        toast.style.zIndex = '11';
+        toast.innerHTML = `
+            <div class="toast show" role="alert">
+                <div class="toast-header ${bgClass} text-white">
+                    <strong class="me-auto">${title}</strong>
+                    <button type="button" class="btn-close btn-close-white" onclick="this.closest('.position-fixed').remove()"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => toast.remove(), 3000);
+    }
+});
+</script>
+
+<%- include('../partials/footer') %>

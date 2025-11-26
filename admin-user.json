@@ -1,0 +1,10 @@
+{
+  "name": "Admin",
+  "email": "admin@nursery.com",
+  "password": "$2a$10$rZ5F8pXKxN3qY7nQZ5F8pO9Y7nQZ5F8pO9Y7nQZ5F8pO9Y7nQZ5F8O",
+  "role": "admin",
+  "phone": "+977 9801234567",
+  "active": true,
+  "createdAt": {"$date": "2025-11-24T00:00:00.000Z"},
+  "updatedAt": {"$date": "2025-11-24T00:00:00.000Z"}
+}

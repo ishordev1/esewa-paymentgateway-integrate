@@ -1,0 +1,252 @@
+<%- include('../partials/header', { title: title || 'Track Order' }) %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Track Your Order</h2>
+            
+            <!-- Search Form -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form action="/track-order" method="POST">
+                        <div class="mb-3">
+                            <label for="orderNumber" class="form-label">Order Number</label>
+                            <input type="text" class="form-control" id="orderNumber" name="orderNumber" 
+                                   placeholder="e.g., ORD-000001">
+                            <small class="form-text text-muted">Or enter your email to see all your orders</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="your@email.com">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-search"></i> Track Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <% if (error) { %>
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> <%= error %>
+                </div>
+            <% } %>
+
+            <!-- Single Order Result -->
+            <% if (order) { %>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Order Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Order Number:</strong> <%= order.orderNumber %></p>
+                                <p><strong>Order Date:</strong> <%= new Date(order.createdAt).toLocaleDateString() %></p>
+                                <p><strong>Total Amount:</strong> NPR <%= order.totalAmount.toLocaleString() %></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Payment Status:</strong> 
+                                    <span class="badge bg-<%= order.paymentStatus === 'Completed' ? 'success' : 'warning' %>">
+                                        <%= order.paymentStatus %>
+                                    </span>
+                                </p>
+                                <p><strong>Order Status:</strong> 
+                                    <span class="badge bg-<%= order.orderStatus === 'Delivered' ? 'success' : 'primary' %>">
+                                        <%= order.orderStatus %>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Order Status Timeline -->
+                        <div class="order-timeline mb-4">
+                            <h6 class="mb-3">Order Progress</h6>
+                            <div class="d-flex justify-content-between position-relative">
+                                <div class="timeline-line"></div>
+                                
+                                <div class="text-center timeline-step <%= order.orderStatus !== 'Cancelled' ? 'active' : '' %>">
+                                    <div class="timeline-icon <%= order.orderStatus !== 'Cancelled' ? 'bg-success' : 'bg-secondary' %>">
+                                        <i class="bi bi-check-circle text-white"></i>
+                                    </div>
+                                    <small class="d-block mt-2">Placed</small>
+                                </div>
+
+                                <div class="text-center timeline-step <%= ['Processing', 'Shipped', 'Delivered'].includes(order.orderStatus) ? 'active' : '' %>">
+                                    <div class="timeline-icon <%= ['Processing', 'Shipped', 'Delivered'].includes(order.orderStatus) ? 'bg-success' : 'bg-secondary' %>">
+                                        <i class="bi bi-arrow-repeat text-white"></i>
+                                    </div>
+                                    <small class="d-block mt-2">Processing</small>
+                                </div>
+
+                                <div class="text-center timeline-step <%= ['Shipped', 'Delivered'].includes(order.orderStatus) ? 'active' : '' %>">
+                                    <div class="timeline-icon <%= ['Shipped', 'Delivered'].includes(order.orderStatus) ? 'bg-success' : 'bg-secondary' %>">
+                                        <i class="bi bi-truck text-white"></i>
+                                    </div>
+                                    <small class="d-block mt-2">Shipped</small>
+                                </div>
+
+                                <div class="text-center timeline-step <%= order.orderStatus === 'Delivered' ? 'active' : '' %>">
+                                    <div class="timeline-icon <%= order.orderStatus === 'Delivered' ? 'bg-success' : 'bg-secondary' %>">
+                                        <i class="bi bi-box-seam text-white"></i>
+                                    </div>
+                                    <small class="d-block mt-2">Delivered</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Customer Information -->
+                        <div class="mb-3">
+                            <h6>Delivery Information</h6>
+                            <p class="mb-1"><strong>Name:</strong> <%= order.customer.name %></p>
+                            <p class="mb-1"><strong>Email:</strong> <%= order.customer.email %></p>
+                            <p class="mb-1"><strong>Phone:</strong> <%= order.customer.phone %></p>
+                            <% if (order.customer.address && order.customer.address.street) { %>
+                                <p class="mb-1"><strong>Address:</strong> 
+                                    <%= order.customer.address.street %>, 
+                                    <%= order.customer.address.city %>, 
+                                    <%= order.customer.address.state %>
+                                </p>
+                            <% } %>
+                        </div>
+
+                        <!-- Order Items -->
+                        <div class="mb-3">
+                            <h6>Order Items</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Size</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% order.items.forEach(item => { %>
+                                            <tr>
+                                                <td><%= item.productName %></td>
+                                                <td><%= item.variant.size %></td>
+                                                <td><%= item.quantity %></td>
+                                                <td>NPR <%= item.price.toLocaleString() %></td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <% if (order.notes) { %>
+                            <div class="alert alert-info">
+                                <strong>Notes:</strong> <%= order.notes %>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Multiple Orders Result -->
+            <% if (typeof orders !== 'undefined' && orders && orders.length > 0) { %>
+                <h5 class="mb-3">Your Orders</h5>
+                <% orders.forEach(ord => { %>
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="mb-1"><%= ord.orderNumber %></h6>
+                                    <small class="text-muted">
+                                        <%= new Date(ord.createdAt).toLocaleDateString() %>
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-<%= ord.orderStatus === 'Delivered' ? 'success' : ord.orderStatus === 'Cancelled' ? 'danger' : 'primary' %>">
+                                        <%= ord.orderStatus %>
+                                    </span>
+                                    <div class="mt-1">
+                                        <small><strong>NPR <%= ord.totalAmount.toLocaleString() %></strong></small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mini Timeline -->
+                            <div class="progress mb-3" style="height: 8px;">
+                                <% 
+                                    let progress = 25;
+                                    if (ord.orderStatus === 'Processing') progress = 50;
+                                    if (ord.orderStatus === 'Shipped') progress = 75;
+                                    if (ord.orderStatus === 'Delivered') progress = 100;
+                                    if (ord.orderStatus === 'Cancelled') progress = 100;
+                                %>
+                                <div class="progress-bar <%= ord.orderStatus === 'Cancelled' ? 'bg-danger' : 'bg-success' %>" 
+                                     style="width: <%= progress %>%"></div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted">
+                                        <%= ord.items.length %> item(s) | 
+                                        <%= ord.paymentStatus %>
+                                    </small>
+                                </div>
+                                <form action="/track-order" method="POST" style="display: inline;">
+                                    <input type="hidden" name="orderNumber" value="<%= ord.orderNumber %>">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-eye"></i> View Details
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<style>
+    .order-timeline {
+        padding: 20px 0;
+    }
+    
+    .timeline-line {
+        position: absolute;
+        top: 20px;
+        left: 10%;
+        right: 10%;
+        height: 3px;
+        background-color: #dee2e6;
+        z-index: 0;
+    }
+    
+    .timeline-step {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+    }
+    
+    .timeline-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .timeline-step.active .timeline-icon {
+        animation: pulse 1s ease-in-out;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+</style>
+
+<%- include('../partials/footer') %>

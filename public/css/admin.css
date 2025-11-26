@@ -1,0 +1,47 @@
+/* Admin panel custom styles */
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .nav-link {
+    color: #333;
+    padding: 10px 20px;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #28a745;
+}
+
+.sidebar .nav-link.active {
+    background-color: #28a745;
+    color: white;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.table {
+    background-color: white;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+main {
+    min-height: calc(100vh - 56px);
+    background-color: #f8f9fa;
+}

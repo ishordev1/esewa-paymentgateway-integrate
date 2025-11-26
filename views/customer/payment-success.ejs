@@ -1,0 +1,48 @@
+<%- include('../partials/header', { title: 'Payment Successful' }) %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <div class="card-body py-5">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                    <h2 class="mt-4 text-success">Payment Successful!</h2>
+                    <p class="lead">Thank you for your order.</p>
+                    
+                    <% if (order) { %>
+                    <div class="alert alert-success mt-4">
+                        <h5>Order Number: <%= order.orderNumber %></h5>
+                        <p class="mb-0">Total Amount: NPR <%= order.totalAmount.toLocaleString() %></p>
+                        <p class="mb-0 mt-2"><small>Payment Status: <%= order.paymentStatus %></small></p>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> 
+                        <strong>Track your order anytime!</strong><br>
+                        Use order number <strong><%= order.orderNumber %></strong> or your email address.
+                    </div>
+                    
+                    <p>A confirmation email has been sent to <strong><%= order.customer.email %></strong></p>
+                    <p class="text-muted">Your plants will be delivered to your address soon!</p>
+                    <% } %>
+                    
+                    <div class="mt-4">
+                        <a href="/track-order" class="btn btn-primary me-2">
+                            <i class="bi bi-geo-alt"></i> Track Order
+                        </a>
+                        <a href="/products" class="btn btn-success me-2">Continue Shopping</a>
+                        <a href="/" class="btn btn-outline-secondary">Go to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Clear cart after successful payment
+localStorage.removeItem('nursery_cart');
+updateCartCount();
+</script>
+
+<%- include('../partials/footer') %>
